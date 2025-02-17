@@ -1,5 +1,6 @@
 package com.example.fidely.fidely.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${couchdb.role}")
+    private String couchDbRole;
+
+    @Value("${couchdb.username}")
+    private String couchDbUsername;
+
+    @Value("${couchdb.password}")
+    private String couchDbPassword;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,9 +44,9 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("admin123"))
-            .roles("ADMIN")
+            .username(couchDbUsername)
+            .password(passwordEncoder().encode(couchDbPassword))
+            .roles(couchDbRole)
             .build();
     }
 }
