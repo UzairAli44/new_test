@@ -11,19 +11,17 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Use a secure key instead of a hardcoded string
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Optional: Token expiration time can be externalized
-    @Value("${jwt.expiration-time}") // Load from application.properties
-    private long expirationTime; // Default value can be set here if needed
+    @Value("${jwt.expiration-time}")
+    private long expirationTime; // Injected from application.properties
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))  // Dynamic expiration
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256) // Use the secure key
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -42,7 +40,7 @@ public class JwtUtil {
     private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY) // Use the secure key
+                    .setSigningKey(SECRET_KEY)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();

@@ -40,6 +40,12 @@
 			<artifactId>org.ektorp</artifactId>
 			<version>1.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version> <!-- Use the latest version -->
+			<scope>provided</scope>
+		</dependency>
 		<!-- JSON Web Token (JWT) for Authentication -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
